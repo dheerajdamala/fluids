@@ -5,7 +5,7 @@
 
 let mazeEngine = null;
 let fluidsSolver = null;
-let currentView = "home";
+let currentView = "ai";
 
 // Fluids Chart.js instances
 let chartProfiles = null;
@@ -23,10 +23,16 @@ document.addEventListener("DOMContentLoaded", () => {
   initNavigation();
   initAIClickHandlers();
   initFluidsClickHandlers();
+
+  // Activate AI Maze directly on load
+  switchView("ai");
 });
 
 // ------------------ View Navigation & Conversion ------------------
 function switchView(viewName) {
+  if (viewName !== "ai" && viewName !== "fluids") {
+    viewName = "ai";
+  }
   currentView = viewName;
 
   // Toggle pages
@@ -49,16 +55,13 @@ function switchView(viewName) {
   if (convertBtn) {
     const swapSvg = `<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>`;
     const arrowSvg = `<svg class="btn-icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`;
-    
+
     if (viewName === "ai") {
-      convertBtn.innerHTML = `${swapSvg} <span>Switch to Fluids CFD</span> ${arrowSvg}`;
+      convertBtn.innerHTML = `${swapSvg} <span>Switch to Fluids (Pipe CFD)</span> ${arrowSvg}`;
       convertBtn.dataset.mode = "to-fluids";
-    } else if (viewName === "fluids") {
-      convertBtn.innerHTML = `${swapSvg} <span>Switch to AI Maze</span> ${arrowSvg}`;
-      convertBtn.dataset.mode = "to-ai";
     } else {
-      convertBtn.innerHTML = `${swapSvg} <span>Switch Modules: AI &amp; Fluids</span> ${arrowSvg}`;
-      convertBtn.dataset.mode = "default";
+      convertBtn.innerHTML = `${swapSvg} <span>Switch to AI with Python (Maze Robot)</span> ${arrowSvg}`;
+      convertBtn.dataset.mode = "to-ai";
     }
   }
 
