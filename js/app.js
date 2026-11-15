@@ -47,15 +47,18 @@ function switchView(viewName) {
   // Update Master Converter Button
   const convertBtn = document.getElementById("masterConvertBtn");
   if (convertBtn) {
+    const swapSvg = `<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>`;
+    const arrowSvg = `<svg class="btn-icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`;
+    
     if (viewName === "ai") {
-      convertBtn.innerHTML = `🔀 Switch from AI to Fluids (CFD) ➔`;
-      convertBtn.style.background = "linear-gradient(135deg, #94e2d5, #89b4fa)";
+      convertBtn.innerHTML = `${swapSvg} <span>Switch to Fluids CFD</span> ${arrowSvg}`;
+      convertBtn.dataset.mode = "to-fluids";
     } else if (viewName === "fluids") {
-      convertBtn.innerHTML = `🔀 Switch from Fluids to AI (Maze) ➔`;
-      convertBtn.style.background = "linear-gradient(135deg, #a6e3a1, #f9e2af)";
+      convertBtn.innerHTML = `${swapSvg} <span>Switch to AI Maze</span> ${arrowSvg}`;
+      convertBtn.dataset.mode = "to-ai";
     } else {
-      convertBtn.innerHTML = `🔀 Convert: AI with Python ➔ Fluids`;
-      convertBtn.style.background = "linear-gradient(135deg, #cba6f7, #94e2d5)";
+      convertBtn.innerHTML = `${swapSvg} <span>Switch Modules: AI &amp; Fluids</span> ${arrowSvg}`;
+      convertBtn.dataset.mode = "default";
     }
   }
 

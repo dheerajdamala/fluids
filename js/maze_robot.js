@@ -614,7 +614,7 @@ class MazeRobotEngine {
       this.robot.isNavigating = false;
       this.robot.isFinished = true;
       this.updateHUD(
-        "GOAL REACHED! 🏆",
+        "GOAL REACHED [OPTIMAL]",
         this.currentResult.explored.length,
         this.currentResult.path.length - 1,
         this.currentResult.time.toFixed(2),
@@ -648,7 +648,7 @@ class MazeRobotEngine {
       this.robot.c = this.goal.c;
       this.robot.trail = res.path;
       this.robot.isFinished = true;
-      this.updateHUD("GOAL REACHED! ⚡", res.explored.length, res.path.length - 1, res.time.toFixed(2), `${res.path.length - 1} / ${res.path.length - 1}`);
+      this.updateHUD("GOAL REACHED [INSTANT]", res.explored.length, res.path.length - 1, res.time.toFixed(2), `${res.path.length - 1} / ${res.path.length - 1}`);
     } else {
       this.updateHUD("NO PATH FOUND", res.explored.length, 0, res.time.toFixed(2), "0 / 0");
     }
