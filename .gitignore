@@ -35,3 +35,7 @@ wheels/
 Thumbs.db
 .vscode/
 .idea/
+
+# Netlify
+.netlify/
+

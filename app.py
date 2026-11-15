@@ -11,7 +11,9 @@ from tkinter import ttk, messagebox
 
 # Add project subfolders to sys.path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-AI_DIR = os.path.join(BASE_DIR, "ai with pythin")
+AI_DIR = os.path.join(BASE_DIR, "ai with python")
+if not os.path.exists(AI_DIR):
+    AI_DIR = os.path.join(BASE_DIR, "ai with pythin")
 FLUIDS_DIR = os.path.join(BASE_DIR, "fluids", "python")
 
 if AI_DIR not in sys.path:

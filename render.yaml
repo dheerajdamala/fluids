@@ -8,3 +8,4 @@ services:
       - path: /*
         name: X-Frame-Options
         value: SAMEORIGIN
+

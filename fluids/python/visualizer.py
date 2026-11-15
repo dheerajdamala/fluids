@@ -260,7 +260,9 @@ class PipeFlowApp:
     def _launch_ai_suite(self):
         import subprocess, sys, os
         base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        ai_script = os.path.join(base_dir, "ai with pythin", "main.py")
+        ai_script = os.path.join(base_dir, "ai with python", "main.py")
+        if not os.path.exists(ai_script):
+            ai_script = os.path.join(base_dir, "ai with pythin", "main.py")
         if os.path.exists(ai_script):
             subprocess.Popen([sys.executable, ai_script])
 
