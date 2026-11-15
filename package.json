@@ -1,0 +1,22 @@
+{
+  "name": "unified-ai-and-fluids-suite",
+  "version": "1.0.0",
+  "description": "Unified AI Heuristic Maze-Solving Robot & Navier-Stokes Pipe Flow CFD Simulation Web App",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000"
+  },
+  "keywords": [
+    "artificial-intelligence",
+    "maze-solving-robot",
+    "pathfinding",
+    "a-star",
+    "cfd",
+    "fluid-dynamics",
+    "hagen-poiseuille",
+    "navier-stokes"
+  ],
+  "author": "Engineering AI Team",
+  "license": "MIT"
+}
+

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unified Computational Suite: Smart AI Maze Robot & Laminar Pipe Flow CFD</title>
+  <meta name="description" content="Interactive web simulation suite combining an Autonomous 2D Maze-Solving Robot with AI search heuristics and a 2D Axisymmetric Incompressible Navier-Stokes CFD pipe flow solver.">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Chart.js for high-fidelity interactive plots -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <div class="brand-title">⚡ UNIFIED COMPUTATIONAL LAB</div>
+      <div class="brand-sub">Autonomous AI Heuristic Robotics & Navier-Stokes Pipe Flow CFD</div>
+    </div>
+
+    <div class="nav-actions">
+      <div class="nav-links">
+        <button class="nav-btn active" data-target="home">🏠 Main Hub</button>
+        <button class="nav-btn" data-target="ai">🤖 AI with Python (Maze)</button>
+        <button class="nav-btn" data-target="fluids">🌊 Fluids (Pipe CFD)</button>
+      </div>
+      <!-- Primary Converter / Switch Button -->
+      <button id="masterConvertBtn" class="btn-convert">
+        🔀 Convert: AI with Python ➔ Fluids
+      </button>
+    </div>
+  </header>
+
+  <!-- Main View Container -->
+  <main class="app-container">
+
+    <!-- ================================================================= -->
+    <!-- VIEW 1: MAIN HUB / LANDING DASHBOARD                             -->
+    <!-- ================================================================= -->
+    <section id="page-home" class="page-view active">
+      <div class="hero-banner">
+        <h1>INTERACTIVE ENGINEERING & AI SUITE</h1>
+        <p>
+          A unified web-deployable simulation environment implementing two advanced computational domains:
+          <strong>Autonomous Robotics Path Planning</strong> with 6 AI search algorithms, and 
+          <strong>2D Axisymmetric Computational Fluid Dynamics (CFD)</strong> for internal laminar pipe flow.
+        </p>
+      </div>
+
+      <div class="cards-grid">
+        <!-- Feature Card 1: AI with Python -->
+        <article class="feature-card">
+          <div>
+            <span class="card-badge badge-ai">Artificial Intelligence</span>
+            <h2>🤖 Smart Maze-Solving Robot</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">
+              Simulate an autonomous 2D robot navigating intricate labyrinths, obstacle fields, and local minima traps.
+            </p>
+            <ul>
+              <li><strong>6 Search Algorithms</strong>: A* (Manhattan & Euclidean), BFS, DFS, UCS, Greedy Best-First</li>
+              <li><strong>Kinematic 2D Robot</strong>: Directional headlights beam, sensor eyes, treads & antenna</li>
+              <li><strong>Procedural Mazes</strong>: Recursive Backtracker, Prim's, Bottleneck, Spiral, Trap</li>
+              <li><strong>Performance Benchmarks</strong>: Real-time node expansion wave & optimality metrics</li>
+            </ul>
+          </div>
+          <button class="card-btn btn-ai" onclick="switchView('ai')">
+            ▶ LAUNCH AI MAZE SOLVER
+          </button>
+        </article>
+
+        <!-- Feature Card 2: Fluids CFD -->
+        <article class="feature-card">
+          <div>
+            <span class="card-badge badge-fluids">Fluid Mechanics & CFD</span>
+            <h2>🌊 Laminar Pipe Flow Simulation</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">
+              Numerical solution of water flow through a circular pipe from uniform slug inlet through the developing entrance length to fully developed Hagen-Poiseuille flow.
+            </p>
+            <ul>
+              <li><strong>Roll Number Velocity</strong>: Parameterized inlet velocity $U_{in}$ (e.g. 67 m/s)</li>
+              <li><strong>Laminar Diameter</strong>: Auto-calculated microtube geometry for $Re = 1600 < 2300$</li>
+              <li><strong>Developing & Developed</strong>: Hydrodynamic entrance length $L_e$ and pipe length $1.6 L_e$</li>
+              <li><strong>High-Fidelity Colormap</strong>: 2D velocity field $u(x, r)$, radial profiles, and pressure drop</li>
+            </ul>
+          </div>
+          <button class="card-btn btn-fluids" onclick="switchView('fluids')">
+            🌊 LAUNCH FLUIDS CFD SIMULATOR
+          </button>
+        </article>
+      </div>
+
+      <!-- Deployment Info Box -->
+      <div class="control-group" style="margin-top: 1rem; padding: 1.25rem;">
+        <div class="group-title" style="font-size: 0.9rem; color: var(--accent-purple);">🚀 Instant 1-Click Deployment Guide</div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          This web application is built with 100% client-side HTML5, CSS3, and JavaScript with zero backend dependencies. It can be deployed in seconds to:
+        </p>
+        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; font-size: 0.82rem; color: var(--text-main);">
+          <div><strong>• Vercel:</strong> Run <code>vercel</code> or push to GitHub and import repository.</div>
+          <div><strong>• Netlify:</strong> Drag and drop this folder into Netlify Drop.</div>
+          <div><strong>• GitHub Pages:</strong> Enable Pages in repo Settings pointing to root <code>/</code>.</div>
+          <div><strong>• Local:</strong> Run <code>python -m http.server 8000</code> or open <code>index.html</code>.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- VIEW 2: AI WITH PYTHON (MAZE-SOLVING ROBOT)                      -->
+    <!-- ================================================================= -->
+    <section id="page-ai" class="page-view">
+      <div class="view-top-bar">
+        <div class="view-top-title" style="color: var(--accent-green);">
+          🤖 SMART MAZE-SOLVING ROBOT VISUALIZER
+        </div>
+        <!-- In-view Switcher Button -->
+        <button class="btn-inline-switch" onclick="switchView('fluids')">
+          🌊 Switch to Fluids (Pipe Flow CFD) ➔
+        </button>
+      </div>
+
+      <div class="workspace-grid">
+        <!-- Sidebar Controls -->
+        <aside class="sidebar-panel">
+          <!-- Algorithm -->
+          <div class="control-group">
+            <div class="group-title">AI Search Algorithm</div>
+            <select id="selectAiAlgo" class="form-select">
+              <option value="A* (Manhattan)" selected>A* Search (Manhattan) [Optimal]</option>
+              <option value="A* (Euclidean)">A* Search (Euclidean) [Optimal]</option>
+              <option value="BFS">Breadth-First Search (BFS) [Shortest Path]</option>
+              <option value="DFS">Depth-First Search (DFS) [Deep Explorer]</option>
+              <option value="UCS">Uniform Cost Search (UCS / Dijkstra)</option>
+              <option value="Greedy Best-First">Greedy Best-First [Fast Heuristic]</option>
+            </select>
+          </div>
+
+          <!-- Maze Generation -->
+          <div class="control-group">
+            <div class="group-title">Maze Environment</div>
+            <select id="selectAiMaze" class="form-select" style="margin-bottom: 0.4rem;">
+              <option value="backtracker" selected>Recursive Backtracker (Labyrinth)</option>
+              <option value="prims">Prim's Algorithm (Organic Branching)</option>
+              <option value="rand25">Random Obstacles (25% Density)</option>
+              <option value="rand35">Random Obstacles (35% Density)</option>
+              <option value="bottleneck">Preset: Bottleneck Choke</option>
+              <option value="spiral">Preset: Spiral Labyrinth</option>
+              <option value="multiroom">Preset: Multi-Room Chambers</option>
+              <option value="trap">Preset: Trap / Local Minima</option>
+              <option value="blank">Blank Canvas</option>
+            </select>
+            <button id="btnAiGenMaze" class="btn-action-secondary" style="width: 100%;">
+              🎲 Generate Maze
+            </button>
+          </div>
+
+          <!-- Edit Mode -->
+          <div class="control-group">
+            <div class="group-title">Interactive Tool</div>
+            <div class="radio-grid">
+              <label class="radio-chip">
+                <input type="radio" name="toolMode" value="wall" checked> Draw Wall
+              </label>
+              <label class="radio-chip">
+                <input type="radio" name="toolMode" value="erase"> Erase Wall
+              </label>
+              <label class="radio-chip">
+                <input type="radio" name="toolMode" value="start"> Set Start (S)
+              </label>
+              <label class="radio-chip">
+                <input type="radio" name="toolMode" value="goal"> Set Goal (G)
+              </label>
+            </div>
+          </div>
+
+          <!-- Speed Slider -->
+          <div class="control-group">
+            <div class="group-title">Animation Speed</div>
+            <input type="range" id="sliderAiSpeed" min="1" max="100" value="65" style="width: 100%; accent-color: var(--accent-blue);">
+          </div>
+
+          <!-- Actions -->
+          <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+            <button id="btnAiStart" class="btn-action-primary">
+              ▶ START ROBOT SOLVE
+            </button>
+            <div class="btn-row">
+              <button id="btnAiInstant" class="btn-action-secondary" style="background-color: var(--accent-yellow); color: #11111b; font-weight: bold;">
+                ⚡ Instant
+              </button>
+              <button id="btnAiReset" class="btn-action-secondary" style="background-color: var(--accent-red); color: #11111b; font-weight: bold;">
+                ⏹ Reset
+              </button>
+            </div>
+            <div class="btn-row">
+              <button id="btnAiClearPath" class="btn-action-secondary">🧹 Clear Path</button>
+              <button id="btnAiClearWalls" class="btn-action-secondary">🗑 Clear Walls</button>
+            </div>
+            <button id="btnAiCompare" class="btn-btn-compare">
+              📊 RUN ALL & COMPARE
+            </button>
+          </div>
+        </aside>
+
+        <!-- Main Stage -->
+        <main class="main-stage">
+          <!-- HUD Metric Tiles -->
+          <div class="hud-bar">
+            <div class="hud-tile">
+              <span class="hud-label">STATUS</span>
+              <span id="hudStatus" class="hud-value" style="color: var(--accent-blue);">Ready</span>
+            </div>
+            <div class="hud-tile">
+              <span class="hud-label">EXPLORED</span>
+              <span id="hudExplored" class="hud-value" style="color: var(--accent-cyan);">0 states</span>
+            </div>
+            <div class="hud-tile">
+              <span class="hud-label">PATH LENGTH</span>
+              <span id="hudPath" class="hud-value" style="color: var(--accent-yellow);">0 steps</span>
+            </div>
+            <div class="hud-tile">
+              <span class="hud-label">SEARCH TIME</span>
+              <span id="hudTime" class="hud-value" style="color: var(--accent-green);">0.00 ms</span>
+            </div>
+            <div class="hud-tile">
+              <span class="hud-label">ROBOT STEPS</span>
+              <span id="hudSteps" class="hud-value" style="color: var(--accent-purple);">0 / 0</span>
+            </div>
+          </div>
+
+          <!-- HTML5 Maze Canvas -->
+          <div class="canvas-wrapper">
+            <canvas id="mazeCanvas"></canvas>
+          </div>
+        </main>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- VIEW 3: FLUIDS (LAMINAR PIPE FLOW CFD SIMULATOR)                 -->
+    <!-- ================================================================= -->
+    <section id="page-fluids" class="page-view">
+      <div class="view-top-bar">
+        <div class="view-top-title" style="color: var(--accent-blue);">
+          🌊 LAMINAR WATER PIPE FLOW CFD SIMULATOR
+        </div>
+        <!-- In-view Switcher Button -->
+        <button class="btn-inline-switch" onclick="switchView('ai')">
+          🤖 Switch to AI with Python (Maze Robot) ➔
+        </button>
+      </div>
+
+      <div class="workspace-grid">
+        <!-- Sidebar Controls -->
+        <aside class="sidebar-panel">
+          <div class="control-group">
+            <div class="group-title">Simulation Parameters</div>
+            
+            <label class="form-label">Roll Number (Sets U_in in m/s):</label>
+            <input type="number" id="inputFluidsRoll" class="form-input" value="67" min="1" max="99" style="margin-bottom: 0.6rem;">
+
+            <label class="form-label">Target Reynolds Number (&lt; 2300):</label>
+            <input type="number" id="inputFluidsRe" class="form-input" value="1600" min="100" max="2200" style="margin-bottom: 0.6rem;">
+
+            <label class="form-label">Radial Grid Nodes (Nr):</label>
+            <input type="number" id="inputFluidsNr" class="form-input" value="80" min="40" max="150" style="margin-bottom: 0.6rem;">
+
+            <label class="form-label">Axial Grid Stations (Nx):</label>
+            <input type="number" id="inputFluidsNx" class="form-input" value="300" min="100" max="600" style="margin-bottom: 0.75rem;">
+
+            <button id="btnFluidsRun" class="btn-action-primary" style="background-color: var(--accent-blue);">
+              🚀 RUN CFD SIMULATION
+            </button>
+          </div>
+
+          <!-- Computed Summary Display -->
+          <div class="control-group" style="flex: 1; display: flex; flex-direction: column;">
+            <div class="group-title">Hydrodynamic Properties</div>
+            <pre id="fluidsSummaryBox" class="summary-pre">Running simulation...</pre>
+          </div>
+        </aside>
+
+        <!-- Main Stage (Tabs with Colormap & Chart.js) -->
+        <main class="main-stage">
+          <div class="tabs-header">
+            <button class="tab-btn active" data-pane="paneContour">2D Velocity Colormap</button>
+            <button class="tab-btn" data-pane="paneProfiles">Radial Profiles u(r)</button>
+            <button class="tab-btn" data-pane="paneCenterline">Centerline uc(x)</button>
+            <button class="tab-btn" data-pane="panePressure">Pressure Drop ΔP(x)</button>
+          </div>
+
+          <!-- Tab Pane 1: 2D Colormap Canvas -->
+          <div id="paneContour" class="tab-pane active">
+            <div class="canvas-wrapper">
+              <canvas id="contourCanvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Tab Pane 2: Radial Profiles -->
+          <div id="paneProfiles" class="tab-pane">
+            <div class="chart-container">
+              <canvas id="chartProfilesCanvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Tab Pane 3: Centerline Development -->
+          <div id="paneCenterline" class="tab-pane">
+            <div class="chart-container">
+              <canvas id="chartCenterlineCanvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Tab Pane 4: Pressure Drop -->
+          <div id="panePressure" class="tab-pane">
+            <div class="chart-container">
+              <canvas id="chartPressureCanvas"></canvas>
+            </div>
+          </div>
+        </main>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================================================================= -->
+  <!-- MODAL: MULTI-ALGORITHM BENCHMARK COMPARISON                      -->
+  <!-- ================================================================= -->
+  <div id="comparisonModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">📊 Multi-Algorithm Benchmark Comparison</div>
+        <button class="modal-close" onclick="closeComparisonModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Algorithm</th>
+              <th>Success</th>
+              <th>Path Length (Steps)</th>
+              <th>Explored States</th>
+              <th>Peak Frontier</th>
+              <th>Time (ms)</th>
+            </tr>
+          </thead>
+          <tbody id="comparisonTableBody"></tbody>
+        </table>
+
+        <div style="height: 280px; position: relative; margin-top: 1rem;">
+          <canvas id="comparisonChartCanvas"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="js/maze_robot.js"></script>
+  <script src="js/fluids_cfd.js"></script>
+  <script src="js/comparison.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
+

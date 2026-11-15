@@ -1,0 +1,96 @@
+; ===================================================================
+; ANSYS Fluent Journal File: 2D Axisymmetric Laminar Pipe Flow
+; Water flow through circular pipe (Developing & Fully Developed)
+; Inlet Velocity: U_in = 67 m/s (Roll Number)
+; Pipe Diameter:  D = 23.97 um (R = 11.99 um)
+; Pipe Length:    L = 3.53 mm (Le = 2.21 mm)
+; ===================================================================
+
+; 1. Enable 2D Axisymmetric Formulation
+/define/models/axisymmetric? yes
+
+; 2. Enable Viscous Laminar Model
+/define/models/viscous/laminar? yes
+
+; 3. Define Water Material Properties
+/define/materials/copy fluid water-liquid
+/define/materials/change-create water-liquid water-liquid yes 
+  constant 998.2       ; Density (kg/m^3)
+  no 
+  no 
+  yes 
+  constant 0.001002    ; Dynamic Viscosity (kg/m-s or Pa.s)
+  no 
+  no 
+  no
+
+; 4. Assign Fluid Material to Cell Zone
+/define/boundary-conditions/fluid fluid-domain yes water-liquid no no no no no no
+
+; 5. Set Boundary Conditions
+; Inlet (Velocity Inlet)
+/define/boundary-conditions/velocity-inlet inlet
+  yes 
+  no 67.0             ; Velocity Magnitude U_in = 67 m/s
+  no 0.0              ; Supersonic/Initial Gauge Pressure
+  no 0.0              ; Radial Velocity Component
+  no yes              ; Temperature if enabled
+
+; Outlet (Pressure Outlet)
+/define/boundary-conditions/pressure-outlet outlet
+  yes 
+  no 0.0              ; Gauge Pressure = 0 Pa
+  no 0.0              ; Radial direction component
+  no yes
+
+; Centerline (Axis of Symmetry at r = 0)
+/define/boundary-conditions/modify-zones/zone-type axis axis
+
+; Pipe Wall (No-Slip at r = R)
+/define/boundary-conditions/wall wall-pipe
+  yes 
+  stationary-wall 
+  no-slip 
+  no 0.0
+
+; 6. Solution Methods & Controls
+/solve/set/discretization-scheme/pressure 12          ; Second Order Pressure
+/solve/set/discretization-scheme/mom 1                ; Second Order Upwind Momentum
+/solve/set/p-v-coupling 20                            ; SIMPLE Scheme
+
+; Residual Convergence Criteria (1e-6)
+/solve/monitors/residual/convergence-criteria 1e-6 1e-6 1e-6
+
+; 7. Initialization
+/solve/initialize/initialize-flow
+/solve/initialize/compute-defaults/velocity-inlet inlet
+
+; 8. Run Calculation
+/solve/iterate 500
+
+; 9. Post-Processing & Export
+; Export Centerline Velocity XY Plot
+/plot/plot-to-file "ansys_centerline_velocity.xy"
+  yes 
+  centerline-axis 
+  () 
+  axial-velocity 
+  yes 
+  x-coordinate 
+  no
+
+; Export Wall Shear Stress XY Plot
+/plot/plot-to-file "ansys_wall_shear_stress.xy"
+  yes 
+  wall-pipe 
+  () 
+  wall-shear-stress 
+  yes 
+  x-coordinate 
+  no
+
+; Save Cas/Data
+/file/write-case-data "pipe_flow_laminar.cas.h5"
+
+exit yes
+

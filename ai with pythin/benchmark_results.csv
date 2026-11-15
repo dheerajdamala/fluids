@@ -1,0 +1,7 @@
+Algorithm,Success,Path_Length_Steps,Nodes_Explored,Max_Frontier_Size,Execution_Time_ms
+BFS,True,26,479,31,4.512
+DFS,True,60,528,200,6.555
+Uniform Cost Search,True,26,479,31,4.094
+A* Search (Manhattan),True,26,91,29,0.898
+A* Search (Euclidean),True,26,160,49,1.334
+Greedy Best-First (Manhattan),True,26,91,29,0.591
