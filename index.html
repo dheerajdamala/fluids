@@ -3,19 +3,116 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Unified Computational Suite | AI Heuristic Robotics &amp; Navier-Stokes CFD</title>
-  <meta name="description" content="Simulation suite combining an autonomous heuristic AI search robot with 2D axisymmetric Navier-Stokes pipe flow CFD.">
+  <title>Engineering &amp; AI Simulation Laboratories</title>
+  <meta name="description" content="Select between the Smart AI Maze-Solving Robot application and the Laminar Water Pipe Flow CFD Simulator.">
   
-  <!-- Modern Technical Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Master Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
-  
-  <!-- Chart.js for Scientific Plots -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .portal-container {
+      max-width: 1100px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+    }
+    .portal-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .portal-header h1 {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .portal-header p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+    .portal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 1.75rem;
+    }
+    .portal-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .portal-card:hover {
+      border-color: var(--accent-cyan);
+      background: #171e2f;
+    }
+    .portal-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+    .tag-ai {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .tag-fluids {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    .portal-card h2 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.6rem;
+    }
+    .portal-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      margin-bottom: 1.75rem;
+    }
+    .portal-launch-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      width: 100%;
+      padding: 0.85rem 1.25rem;
+      border-radius: 8px;
+      font-family: var(--font-display);
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+    .portal-launch-btn:hover {
+      opacity: 0.92;
+    }
+    .btn-launch-ai {
+      background: #10b981;
+      color: #042416;
+    }
+    .btn-launch-fluids {
+      background: #38bdf8;
+      color: #04162e;
+    }
+  </style>
 </head>
 <body>
 
@@ -28,376 +125,55 @@
           <path d="M2 17l10 5 10-5"/>
           <path d="M2 12l10 5 10-5"/>
         </svg>
-        <span>UNIFIED COMPUTATIONAL LAB</span>
+        <span>COMPUTATIONAL LABORATORY SUITE</span>
       </div>
-      <div class="brand-sub">AI Search Heuristics &amp; Navier-Stokes Pipe Flow CFD</div>
-    </div>
-
-    <div class="nav-actions">
-      <!-- Direct View Switcher Tabs -->
-      <div class="nav-links">
-        <button class="nav-btn active" data-target="ai">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="4" y="4" width="16" height="16" rx="2"/>
-            <rect x="9" y="9" width="6" height="6"/>
-            <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3"/>
-          </svg>
-          <span>AI with Python (Maze Robot)</span>
-        </button>
-        <button class="nav-btn" data-target="fluids">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M2 6c3 0 3-3 6-3s3 3 6 3 3-3 6-3 3 3 6 3"/>
-            <path d="M2 12c3 0 3-3 6-3s3 3 6 3 3-3 6-3 3 3 6 3"/>
-            <path d="M2 18c3 0 3-3 6-3s3 3 6 3 3-3 6-3 3 3 6 3"/>
-          </svg>
-          <span>Fluids (Pipe CFD)</span>
-        </button>
-      </div>
-
-      <!-- Prominent 1-Click Conversion Button -->
-      <button id="masterConvertBtn" class="btn-convert">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-          <path d="m16 3 4 4-4 4"/>
-          <path d="M20 7H4"/>
-          <path d="m8 21-4-4 4-4"/>
-          <path d="M4 17h16"/>
-        </svg>
-        <span>Switch to Fluids (Pipe CFD)</span>
-        <svg class="btn-icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14"/>
-          <path d="m12 5 7 7-7 7"/>
-        </svg>
-      </button>
+      <div class="brand-sub">Independent Academic Simulation Environments</div>
     </div>
   </header>
 
-  <!-- Main Viewport Container -->
-  <main class="app-container">
+  <!-- Portal Container -->
+  <div class="portal-container">
+    <div class="portal-header">
+      <h1>ACADEMIC SIMULATION PORTAL</h1>
+      <p>Select an independent application below to launch its dedicated laboratory environment:</p>
+    </div>
 
-    <!-- ================================================================= -->
-    <!-- MODULE 1: AI WITH PYTHON (MAZE-SOLVING ROBOT VISUALIZER)          -->
-    <!-- ================================================================= -->
-    <section id="page-ai" class="page-view active">
-      <div class="view-top-bar">
-        <div class="view-top-title">
-          <span class="status-indicator-dot green"></span>
-          <span>SMART MAZE-SOLVING ROBOT VISUALIZER</span>
-          <span class="badge-sub">6 AI ALGORITHMS</span>
+    <div class="portal-grid">
+      <!-- Website 1: AI Maze Robot -->
+      <div class="portal-card">
+        <div>
+          <span class="portal-tag tag-ai">COURSE: AI WITH PYTHON</span>
+          <h2>Smart Maze-Solving Robot</h2>
+          <p>
+            Autonomous 2D kinematic robot platform implementing 6 graph search algorithms (A* Manhattan, A* Euclidean, BFS, DFS, UCS, Greedy Best-First) with real-time heuristic visualization, obstacle editing, and multi-algorithm benchmarking.
+          </p>
         </div>
-        
-        <div class="view-top-controls">
-          <!-- Quick Inline Switcher -->
-          <button class="btn-inline-switch" onclick="switchView('fluids')">
-            <span>Switch to Fluids (Pipe CFD)</span>
-            <svg class="btn-icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </button>
-        </div>
+        <a href="ai/index.html" class="portal-launch-btn btn-launch-ai">
+          <span>OPEN AI MAZE SOLVER</span>
+          <svg class="btn-icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </a>
       </div>
 
-      <div class="workspace-grid">
-        <!-- Sidebar Controls -->
-        <aside class="sidebar-panel">
-          <!-- Search Algorithm Select -->
-          <div class="control-group">
-            <div class="group-title">
-              <svg class="ctrl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-              AI SEARCH ALGORITHM
-            </div>
-            <select id="selectAiAlgo" class="form-select">
-              <option value="A* (Manhattan)" selected>A* Search (Manhattan) [Optimal]</option>
-              <option value="A* (Euclidean)">A* Search (Euclidean) [Optimal]</option>
-              <option value="BFS">Breadth-First Search (BFS) [Shortest Path]</option>
-              <option value="DFS">Depth-First Search (DFS) [Deep Explorer]</option>
-              <option value="UCS">Uniform Cost Search (UCS / Dijkstra)</option>
-              <option value="Greedy Best-First">Greedy Best-First [Fast Heuristic]</option>
-            </select>
-          </div>
-
-          <!-- Maze Generation -->
-          <div class="control-group">
-            <div class="group-title">
-              <svg class="ctrl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h.01M17 17h.01M12 12h.01"/></svg>
-              MAZE ENVIRONMENT
-            </div>
-            <select id="selectAiMaze" class="form-select" style="margin-bottom: 0.5rem;">
-              <option value="backtracker" selected>Recursive Backtracker (Labyrinth)</option>
-              <option value="prims">Prim's Algorithm (Organic Branching)</option>
-              <option value="rand25">Random Obstacles (25% Density)</option>
-              <option value="rand35">Random Obstacles (35% Density)</option>
-              <option value="bottleneck">Preset: Bottleneck Choke</option>
-              <option value="spiral">Preset: Spiral Labyrinth</option>
-              <option value="multiroom">Preset: Multi-Room Chambers</option>
-              <option value="trap">Preset: Trap / Local Minima</option>
-              <option value="blank">Blank Canvas</option>
-            </select>
-            <button id="btnAiGenMaze" class="btn-action-secondary" style="width: 100%;">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><circle cx="12" cy="12" r="2"/></svg>
-              <span>Generate Maze</span>
-            </button>
-          </div>
-
-          <!-- Canvas Interactive Tool -->
-          <div class="control-group">
-            <div class="group-title">
-              <svg class="ctrl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-              INTERACTIVE CANVAS TOOL
-            </div>
-            <div class="radio-grid">
-              <label class="radio-chip">
-                <input type="radio" name="toolMode" value="wall" checked> Draw Wall
-              </label>
-              <label class="radio-chip">
-                <input type="radio" name="toolMode" value="erase"> Erase Wall
-              </label>
-              <label class="radio-chip">
-                <input type="radio" name="toolMode" value="start"> Set Start (S)
-              </label>
-              <label class="radio-chip">
-                <input type="radio" name="toolMode" value="goal"> Set Goal (G)
-              </label>
-            </div>
-          </div>
-
-          <!-- Animation Velocity Slider -->
-          <div class="control-group">
-            <div class="group-title">
-              <svg class="ctrl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-              ANIMATION SPEED
-            </div>
-            <input type="range" id="sliderAiSpeed" min="1" max="100" value="65" class="custom-slider">
-          </div>
-
-          <!-- Primary Execution & Clear Actions -->
-          <div class="action-btn-stack">
-            <!-- Start Robot Solve -->
-            <button id="btnAiStart" class="btn-action-primary btn-play">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
-              <span>START ROBOT SOLVE</span>
-            </button>
-
-            <!-- Instant Solve & Reset Robot -->
-            <div class="btn-row">
-              <button id="btnAiInstant" class="btn-action-amber" title="Calculate and render path immediately">
-                <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10 13,2"/></svg>
-                <span>Instant</span>
-              </button>
-              <button id="btnAiReset" class="btn-action-red" title="Reset robot position back to start">
-                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                <span>Reset Robot</span>
-              </button>
-            </div>
-
-            <!-- Clear Path & Clear Maze -->
-            <div class="btn-row">
-              <button id="btnAiClearPath" class="btn-action-clear" title="Clear search path and explored nodes">
-                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                <span>Clear Path</span>
-              </button>
-              <button id="btnAiClearWalls" class="btn-action-clear" title="Clear all obstacles from maze">
-                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="4 2"/></svg>
-                <span>Clear Maze</span>
-              </button>
-            </div>
-
-            <!-- Compare All Algorithms -->
-            <button id="btnAiCompare" class="btn-btn-compare" title="Run all 6 algorithms on this maze and compare performance">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-              <span>RUN ALL &amp; COMPARE</span>
-            </button>
-          </div>
-        </aside>
-
-        <!-- Main Stage -->
-        <main class="main-stage">
-          <!-- HUD Telemetry Bar -->
-          <div class="hud-bar">
-            <div class="hud-tile">
-              <span class="hud-label">STATUS</span>
-              <span id="hudStatus" class="hud-value hud-cyan">READY</span>
-            </div>
-            <div class="hud-tile">
-              <span class="hud-label">EXPLORED STATES</span>
-              <span id="hudExplored" class="hud-value hud-blue">0 states</span>
-            </div>
-            <div class="hud-tile">
-              <span class="hud-label">PATH LENGTH</span>
-              <span id="hudPath" class="hud-value hud-amber">0 steps</span>
-            </div>
-            <div class="hud-tile">
-              <span class="hud-label">SEARCH TIME</span>
-              <span id="hudTime" class="hud-value hud-green">0.00 ms</span>
-            </div>
-            <div class="hud-tile">
-              <span class="hud-label">ROBOT STEPS</span>
-              <span id="hudSteps" class="hud-value hud-purple">0 / 0</span>
-            </div>
-          </div>
-
-          <!-- Maze Canvas Stage -->
-          <div class="canvas-wrapper">
-            <div class="canvas-bezel-top">
-              <span class="bezel-label">SPATIAL GRID 31 &times; 31</span>
-              <span class="bezel-coord">[Start: (1, 1) &bull; Goal: (29, 29)]</span>
-            </div>
-            <canvas id="mazeCanvas"></canvas>
-          </div>
-        </main>
-      </div>
-    </section>
-
-    <!-- ================================================================= -->
-    <!-- MODULE 2: FLUIDS (LAMINAR PIPE FLOW CFD SIMULATOR)                -->
-    <!-- ================================================================= -->
-    <section id="page-fluids" class="page-view">
-      <div class="view-top-bar">
-        <div class="view-top-title">
-          <span class="status-indicator-dot blue"></span>
-          <span>LAMINAR WATER PIPE FLOW CFD SIMULATOR</span>
-          <span class="badge-sub">2D AXISYMMETRIC NAVIER-STOKES</span>
+      <!-- Website 2: Fluids Pipe CFD -->
+      <div class="portal-card">
+        <div>
+          <span class="portal-tag tag-fluids">COURSE: FLUID MECHANICS</span>
+          <h2>Laminar Pipe Flow CFD Simulator</h2>
+          <p>
+            2D axisymmetric incompressible Navier-Stokes solver simulating hydrodynamic water flow through a circular pipe from slug inlet across the entrance length to the fully developed Hagen-Poiseuille parabolic profile.
+          </p>
         </div>
-        
-        <div class="view-top-controls">
-          <!-- Quick Inline Switcher -->
-          <button class="btn-inline-switch" onclick="switchView('ai')">
-            <span>Switch to AI with Python (Maze Robot)</span>
-            <svg class="btn-icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <div class="workspace-grid">
-        <!-- Sidebar Controls -->
-        <aside class="sidebar-panel">
-          <div class="control-group">
-            <div class="group-title">
-              <svg class="ctrl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
-              SIMULATION PARAMETERS
-            </div>
-            
-            <label class="form-label">Roll Number (Sets Inlet Velocity U_in in m/s):</label>
-            <input type="number" id="inputFluidsRoll" class="form-input" value="67" min="1" max="99">
-
-            <label class="form-label" style="margin-top: 0.5rem;">Target Reynolds Number (Re &lt; 2300):</label>
-            <input type="number" id="inputFluidsRe" class="form-input" value="1600" min="100" max="2200">
-
-            <label class="form-label" style="margin-top: 0.5rem;">Radial Mesh Nodes (Nr):</label>
-            <input type="number" id="inputFluidsNr" class="form-input" value="80" min="40" max="150">
-
-            <label class="form-label" style="margin-top: 0.5rem;">Axial Mesh Stations (Nx):</label>
-            <input type="number" id="inputFluidsNx" class="form-input" value="300" min="100" max="600" style="margin-bottom: 0.85rem;">
-
-            <button id="btnFluidsRun" class="btn-action-primary btn-fluids-run">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16" fill="currentColor"/></svg>
-              <span>RUN CFD SIMULATION</span>
-            </button>
-          </div>
-
-          <!-- Computed Summary Display -->
-          <div class="control-group" style="flex: 1; display: flex; flex-direction: column;">
-            <div class="group-title">
-              <svg class="ctrl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-              HYDRODYNAMIC PROPERTIES
-            </div>
-            <pre id="fluidsSummaryBox" class="summary-pre">Initializing solver...</pre>
-          </div>
-        </aside>
-
-        <!-- Main Stage (Tabs with Colormap & Chart.js) -->
-        <main class="main-stage">
-          <div class="tabs-header">
-            <button class="tab-btn active" data-pane="paneContour">
-              <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
-              <span>2D Velocity Colormap</span>
-            </button>
-            <button class="tab-btn" data-pane="paneProfiles">
-              <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 9l-5 5-4-4-6 6"/></svg>
-              <span>Radial Profiles u(r)</span>
-            </button>
-            <button class="tab-btn" data-pane="paneCenterline">
-              <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16M12 4v16"/><circle cx="12" cy="12" r="3"/></svg>
-              <span>Centerline uc(x)</span>
-            </button>
-            <button class="tab-btn" data-pane="panePressure">
-              <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-              <span>Pressure Drop &Delta;P(x)</span>
-            </button>
-          </div>
-
-          <!-- Tab Pane 1: 2D Colormap Canvas -->
-          <div id="paneContour" class="tab-pane active">
-            <div class="canvas-wrapper">
-              <div class="canvas-bezel-top">
-                <span class="bezel-label">AXISYMMETRIC WATER MICROPIPE</span>
-                <span class="bezel-coord">[0 &le; x &le; L &bull; 0 &le; r &le; R]</span>
-              </div>
-              <canvas id="contourCanvas"></canvas>
-            </div>
-          </div>
-
-          <!-- Tab Pane 2: Radial Profiles -->
-          <div id="paneProfiles" class="tab-pane">
-            <div class="chart-container">
-              <canvas id="chartProfilesCanvas"></canvas>
-            </div>
-          </div>
-
-          <!-- Tab Pane 3: Centerline Development -->
-          <div id="paneCenterline" class="tab-pane">
-            <div class="chart-container">
-              <canvas id="chartCenterlineCanvas"></canvas>
-            </div>
-          </div>
-
-          <!-- Tab Pane 4: Pressure Drop -->
-          <div id="panePressure" class="tab-pane">
-            <div class="chart-container">
-              <canvas id="chartPressureCanvas"></canvas>
-            </div>
-          </div>
-        </main>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ================================================================= -->
-  <!-- MODAL: MULTI-ALGORITHM BENCHMARK COMPARISON                      -->
-  <!-- ================================================================= -->
-  <div id="comparisonModal" class="modal-overlay">
-    <div class="modal-card">
-      <div class="modal-header">
-        <div class="modal-title">
-          <svg class="panel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-          <span>Multi-Algorithm Benchmark Comparison</span>
-        </div>
-        <button class="modal-close" onclick="closeComparisonModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Algorithm</th>
-              <th>Solution Found</th>
-              <th>Path Length (Steps)</th>
-              <th>Explored States</th>
-              <th>Peak Frontier</th>
-              <th>Execution Time (ms)</th>
-            </tr>
-          </thead>
-          <tbody id="comparisonTableBody"></tbody>
-        </table>
-
-        <div style="height: 290px; position: relative; margin-top: 1.25rem;">
-          <canvas id="comparisonChartCanvas"></canvas>
-        </div>
+        <a href="fluids-sim/index.html" class="portal-launch-btn btn-launch-fluids">
+          <span>OPEN FLUIDS CFD SIMULATOR</span>
+          <svg class="btn-icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </a>
       </div>
     </div>
   </div>
 
-  <!-- JavaScript Simulation Engines -->
-  <script src="js/maze_robot.js"></script>
-  <script src="js/fluids_cfd.js"></script>
-  <script src="js/comparison.js"></script>
-  <script src="js/app.js"></script>
 </body>
 </html>

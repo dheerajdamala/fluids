@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laminar Water Pipe Flow CFD Simulator | Fluid Mechanics</title>
+  <meta name="description" content="2D axisymmetric Navier-Stokes solver simulating the development of laminar water pipe flow from slug inlet to Hagen-Poiseuille profile.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="fluids-sim/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="nav-brand">
+      <div class="brand-title">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 6c3 0 3-3 6-3s3 3 6 3 3-3 6-3 3 3 6 3"/>
+          <path d="M2 12c3 0 3-3 6-3s3 3 6 3 3-3 6-3 3 3 6 3"/>
+          <path d="M2 18c3 0 3-3 6-3s3 3 6 3 3-3 6-3 3 3 6 3"/>
+        </svg>
+        <span>LAMINAR WATER PIPE FLOW CFD SIMULATOR</span>
+      </div>
+      <div class="brand-sub">Fluid Mechanics &bull; 2D Axisymmetric Incompressible Navier-Stokes Solver</div>
+    </div>
+
+    <div class="nav-actions">
+      <a href="ai.html" class="btn-external-link">
+        <span>AI Maze Robot</span>
+        <svg class="btn-icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+          <polyline points="15 3 21 3 21 9"/>
+          <line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <main class="app-container">
+    <div class="view-top-bar">
+      <div class="view-top-title">
+        <span class="status-indicator-dot blue"></span>
+        <span>INTERNAL HYDRODYNAMIC ENTRANCE SIMULATION</span>
+        <span class="badge-sub">FINITE DIFFERENCE CFD</span>
+      </div>
+    </div>
+
+    <div class="workspace-grid">
+      <aside class="sidebar-panel">
+        <div class="control-group">
+          <div class="group-title">
+            <svg class="ctrl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+            SIMULATION PARAMETERS
+          </div>
+          
+          <label class="form-label">Roll Number (Sets Inlet Velocity U_in in m/s):</label>
+          <input type="number" id="inputFluidsRoll" class="form-input" value="67" min="1" max="99">
+
+          <label class="form-label" style="margin-top: 0.5rem;">Target Reynolds Number (Re &lt; 2300):</label>
+          <input type="number" id="inputFluidsRe" class="form-input" value="1600" min="100" max="2200">
+
+          <label class="form-label" style="margin-top: 0.5rem;">Radial Mesh Nodes (Nr):</label>
+          <input type="number" id="inputFluidsNr" class="form-input" value="80" min="40" max="150">
+
+          <label class="form-label" style="margin-top: 0.5rem;">Axial Mesh Stations (Nx):</label>
+          <input type="number" id="inputFluidsNx" class="form-input" value="300" min="100" max="600" style="margin-bottom: 0.85rem;">
+
+          <button id="btnFluidsRun" class="btn-action-primary btn-fluids-run">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16" fill="currentColor"/></svg>
+            <span>RUN CFD SIMULATION</span>
+          </button>
+        </div>
+
+        <div class="control-group" style="flex: 1; display: flex; flex-direction: column;">
+          <div class="group-title">
+            <svg class="ctrl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            HYDRODYNAMIC PROPERTIES
+          </div>
+          <pre id="fluidsSummaryBox" class="summary-pre">Initializing solver...</pre>
+        </div>
+      </aside>
+
+      <main class="main-stage">
+        <div class="tabs-header">
+          <button class="tab-btn active" data-pane="paneContour">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+            <span>2D Velocity Colormap</span>
+          </button>
+          <button class="tab-btn" data-pane="paneProfiles">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 9l-5 5-4-4-6 6"/></svg>
+            <span>Radial Profiles u(r)</span>
+          </button>
+          <button class="tab-btn" data-pane="paneCenterline">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16M12 4v16"/><circle cx="12" cy="12" r="3"/></svg>
+            <span>Centerline uc(x)</span>
+          </button>
+          <button class="tab-btn" data-pane="panePressure">
+            <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <span>Pressure Drop &Delta;P(x)</span>
+          </button>
+        </div>
+
+        <div id="paneContour" class="tab-pane active">
+          <div class="canvas-wrapper">
+            <div class="canvas-bezel-top">
+              <span class="bezel-label">AXISYMMETRIC WATER MICROPIPE</span>
+              <span class="bezel-coord">[0 &le; x &le; L &bull; 0 &le; r &le; R]</span>
+            </div>
+            <canvas id="contourCanvas"></canvas>
+          </div>
+        </div>
+
+        <div id="paneProfiles" class="tab-pane">
+          <div class="chart-container">
+            <canvas id="chartProfilesCanvas"></canvas>
+          </div>
+        </div>
+
+        <div id="paneCenterline" class="tab-pane">
+          <div class="chart-container">
+            <canvas id="chartCenterlineCanvas"></canvas>
+          </div>
+        </div>
+
+        <div id="panePressure" class="tab-pane">
+          <div class="chart-container">
+            <canvas id="chartPressureCanvas"></canvas>
+          </div>
+        </div>
+      </main>
+    </div>
+  </main>
+
+  <script src="fluids-sim/js/fluids_cfd.js"></script>
+  <script src="fluids-sim/js/app.js"></script>
+</body>
+</html>
