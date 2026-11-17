@@ -1,92 +1,89 @@
-# Unified Computational & AI Suite ⚡
+# Laminar Water Pipe Flow CFD Simulation
 
-A unified desktop application integrating two major engineering modules:
-1. **🤖 AI with Python**: Smart 2D Maze-Solving Robot with real-time heuristic search algorithms and directional kinematics.
-2. **🌊 Fluids**: Laminar Water Flow Through a Circular Pipe (developing entrance region to fully developed Hagen-Poiseuille flow) across Python, ANSYS Fluent, and COMSOL Multiphysics.
+Numerical simulation of water flow through a circular pipe from a uniform slug inlet across the hydrodynamic entrance length to fully developed Hagen-Poiseuille parabolic laminar flow, using Python, ANSYS Fluent, and COMSOL Multiphysics.
 
-Includes a **Main Hub / Landing Dashboard** with one-click conversion buttons enabling instantaneous switching between **AI with Python** and **Fluids**.
+**Live Web Application**: [https://fluids-pipe-cfd.netlify.app](https://fluids-pipe-cfd.netlify.app)
 
 ---
 
-## 🚀 Quick Launch (Unified Master Application)
+## 1. Problem Specification
 
-To launch the master unified desktop application with both modules integrated:
-
-```bash
-python app.py
-```
-
-### 🔀 Seamless Conversion & Switching:
-- **From Main Hub**: Click either **`▶ LAUNCH AI MAZE SOLVER`** or **`🌊 LAUNCH FLUIDS CFD SIMULATOR`**.
-- **From Anywhere**: Click the prominent top-header conversion button:
-  - `🔀 SWITCH: AI with Python ➔ Fluids` (or vice versa).
-- **Inside AI Module**: Dedicated button `🌊 Switch to Fluids (CFD) ➔`.
-- **Inside Fluids Module**: Dedicated button `🤖 Switch to AI with Python ➔`.
-
----
-
-## 📁 Repository Overview
-
-```
-kani/
-├── app.py                      # Master Unified Application Launcher (Both UIs in one window)
-├── README.md                   # This root documentation file
-│
-├── ai with pythin/             # Module 1: AI Maze-Solving Robot
-│   ├── main.py                 # Standalone CLI / GUI entry point
-│   ├── gui.py                  # Tkinter 2D visualizer with "Switch to Fluids" button
-│   ├── robot.py                # 2D Kinematic robot entity (headlights, sensors, treads)
-│   ├── algorithms.py           # BFS, DFS, UCS, A* (Manhattan & Euclidean), Greedy Best-First
-│   ├── maze.py                 # Procedural maze generators (Backtracker, Prim's, Presets)
-│   ├── comparison.py           # Multi-algorithm benchmark harness & Matplotlib plots
-│   ├── test_algorithms.py      # Automated unit test suite (5 tests)
-│   ├── PROJECT_REPORT.md       # Comprehensive academic project report (4 students)
-│   └── README.md               # AI module documentation
-│
-├── ai with python/             # Mirrored folder with identical contents
-│
-└── fluids/                     # Module 2: Laminar Pipe Flow CFD Simulation
-    ├── python/
-    │   ├── pipe_flow_simulation.py  # 2D Axisymmetric implicit Navier-Stokes CFD solver
-    │   ├── visualizer.py            # Standalone Fluids GUI with "Switch to AI" button
-    │   ├── run_simulation.py        # CLI simulation runner & figure exporter
-    │   └── requirements.txt         # Python dependencies
-    ├── ansys/
-    │   ├── pipe_flow_fluent.jou     # ANSYS Fluent automated TUI journal file
-    │   ├── fluent_setup_pyfluent.py # PyFluent Python automation script
-    │   └── ANSYS_FLUENT_GUIDE.md    # Step-by-step Workbench/Fluent guide
-    ├── comsol/
-    │   ├── pipe_flow_comsol.m       # COMSOL LiveLink for MATLAB script
-    │   ├── comsol_mph_setup.py      # Python MPh interface script
-    │   └── COMSOL_GUIDE.md          # Step-by-step COMSOL Multiphysics guide
-    ├── results/
-    │   ├── velocity_contour.png     # 2D pipe velocity colormap
-    │   ├── velocity_profiles.png    # Radial profiles vs. Hagen-Poiseuille
-    │   ├── centerline_velocity.png  # uc(x)/Uin development curve
-    │   ├── pressure_drop.png        # Pressure drop and f_app * Re
-    │   ├── wall_shear_stress.png    # Wall shear stress development
-    │   └── simulation_summary.csv   # Numerical dataset
-    ├── FLUIDS_PROJECT_REPORT.md     # Engineering CFD technical report
-    └── README.md                    # Fluids module documentation
-```
+* **Working Fluid**: Pure liquid water ($\rho = 998.2\text{ kg/m}^3$, $\mu = 1.003 \times 10^{-3}\text{ Pa}\cdot\text{s}$, $\nu = 1.0048 \times 10^{-6}\text{ m}^2/\text{s}$).
+* **Inlet Velocity**: $U_{in} = 67\text{ m/s}$ (Parameterized by student roll number ending in $67$).
+* **Flow Regime**: Strictly laminar flow requiring $Re = \frac{\rho U_{in} D}{\mu} < 2300$.
+* **Target Reynolds Number**: $Re = 1600$ (safely below the critical transition threshold of $2300$).
+* **Pipe Diameter Calculation**:
+  $$D = \frac{Re \cdot \mu}{\rho \cdot U_{in}} = \frac{1600 \cdot 1.003 \times 10^{-3}}{998.2 \cdot 67} \approx 2.397 \times 10^{-5}\text{ m} = 23.97\text{ }\mu\text{m}$$
+  $$\text{Pipe Radius } R = \frac{D}{2} \approx 11.986\text{ }\mu\text{m}$$
+* **Hydrodynamic Entrance Length**:
+  $$L_e \approx 0.06 \cdot Re \cdot D = 0.06 \cdot 1600 \cdot 2.397 \times 10^{-5}\text{ m} \approx 2.301\text{ mm}$$
+* **Total Pipe Length**:
+  $$L = 1.6 \cdot L_e \approx 3.682\text{ mm}$$
+  Ensures both developing entrance region ($0 \le x \le L_e$) and fully developed Hagen-Poiseuille flow ($L_e \le x \le L$) are captured.
 
 ---
 
-## 🛠 Individual Standalone Launchers
+## 2. Governing Equations
 
-If you prefer to run either module independently:
+The flow is governed by the 2D axisymmetric incompressible steady Navier-Stokes and continuity equations:
 
-### 1. Standalone AI Maze-Solving Robot
-```bash
-cd "ai with pythin"
-python main.py
+$$\frac{\partial u}{\partial x} + \frac{1}{r} \frac{\partial (r v)}{\partial r} = 0$$
+
+$$u \frac{\partial u}{\partial x} + v \frac{\partial u}{\partial r} = -\frac{1}{\rho}\frac{dP}{dx} + \nu \left( \frac{\partial^2 u}{\partial r^2} + \frac{1}{r}\frac{\partial u}{\partial r} \right)$$
+
+### Boundary Conditions
+1. **Pipe Inlet ($x = 0$)**: Uniform slug flow $u(0, r) = U_{in} = 67\text{ m/s}$, $v(0, r) = 0$, $P(0) = P_{in}$.
+2. **Pipe Wall ($r = R$)**: No-slip and impermeability $u(x, R) = 0$, $v(x, R) = 0$.
+3. **Pipe Centerline ($r = 0$)**: Axisymmetry $\left.\frac{\partial u}{\partial r}\right|_{r=0} = 0$, $v(x, 0) = 0$.
+4. **Fully Developed Asymptote ($x \ge L_e$)**: Hagen-Poiseuille parabolic profile:
+   $$u(r) = 2 U_{in} \left[ 1 - \left(\frac{r}{R}\right)^2 \right]$$
+   Peak centerline velocity: $u_c = 2 \cdot U_{in} = 134\text{ m/s}$.
+
+---
+
+## 3. Multi-Tool Simulation Implementations
+
+1. **Python Numerical Solver (`fluids/python/`)**:
+   - 2D axisymmetric finite difference boundary layer solver on non-uniform staggered grid ($N_r = 80$, $N_x = 300$).
+   - Real-time continuity mass conservation and tridiagonal matrix algorithm (TDMA).
+2. **ANSYS Fluent (`fluids/ansys/`)**:
+   - Automated journal file `pipe_laminar_journal.jou` setting up 2D axisymmetric domain, inflation layers at the wall, and second-order upwind spatial discretization.
+3. **COMSOL Multiphysics (`fluids/comsol/`)**:
+   - Java/M-file model script `pipe_flow_model.java` utilizing the Laminar Flow (spf) physics interface with mapped boundary quadrilateral mesh.
+4. **Interactive Web Application**:
+   - Pure client-side HTML5/Canvas & Chart.js simulation suite with real-time 2D velocity colormap and radial profile extraction.
+
+---
+
+## 4. Repository Structure
+
 ```
-*(Includes "Switch to Fluids" button in sidebar).*
-
-### 2. Standalone Fluids CFD Simulator
-```bash
-cd fluids
-python python/visualizer.py
+fluids/
+├── index.html            # Standalone web CFD visualizer
+├── css/
+│   └── style.css         # UI stylesheet
+├── js/
+│   ├── fluids_cfd.js     # 2D axisymmetric Navier-Stokes solver
+│   └── app.js            # UI controller & Chart.js plots
+├── fluids/               # Simulation code across tools
+│   ├── python/           # Python solver & visualizer
+│   ├── ansys/            # ANSYS Fluent journal & geometry
+│   └── comsol/           # COMSOL Multiphysics model script
+├── netlify.toml          # Netlify configuration
+└── render.yaml           # Render deployment specification
 ```
-*(Includes "Switch to AI Maze Solver" button in header).*
 
+---
+
+## 5. How to Run
+
+### Web Application
+Open `index.html` in any browser, or visit [https://fluids-pipe-cfd.netlify.app](https://fluids-pipe-cfd.netlify.app).
+
+### Python Solver
+```bash
+cd fluids/python
+pip install -r requirements.txt
+python solver.py
+python visualizer.py
+```

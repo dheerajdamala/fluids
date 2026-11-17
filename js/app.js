@@ -1,187 +1,23 @@
 /**
- * Master Application Controller (JavaScript)
- * Manages view switching, conversion triggers, Fluids Chart.js plots, and UI events.
+ * Laminar Water Pipe Flow CFD Simulator Controller
+ * Fluid Mechanics Course Assignment
  */
 
-let mazeEngine = null;
 let fluidsSolver = null;
-let currentView = "ai";
 
-// Fluids Chart.js instances
+// Chart.js instances
 let chartProfiles = null;
 let chartCenterline = null;
 let chartPressure = null;
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Initialize AI Maze Engine
-  mazeEngine = new MazeRobotEngine("mazeCanvas");
-
-  // Initialize Fluids CFD
+  // Initialize Fluids CFD on load
   runFluidsSimulation();
 
-  // Attach Navigation Listeners
-  initNavigation();
-  initAIClickHandlers();
+  // Attach UI Event Handlers
   initFluidsClickHandlers();
-
-  // Activate AI Maze directly on load
-  switchView("ai");
 });
 
-// ------------------ View Navigation & Conversion ------------------
-function switchView(viewName) {
-  if (viewName !== "ai" && viewName !== "fluids") {
-    viewName = "ai";
-  }
-  currentView = viewName;
-
-  // Toggle pages
-  document.querySelectorAll(".page-view").forEach(page => {
-    page.classList.remove("active");
-  });
-  const targetPage = document.getElementById(`page-${viewName}`);
-  if (targetPage) targetPage.classList.add("active");
-
-  // Update Nav Button active styles
-  document.querySelectorAll(".nav-btn").forEach(btn => {
-    btn.classList.remove("active");
-    if (btn.dataset.target === viewName) {
-      btn.classList.add("active");
-    }
-  });
-
-  // Update Master Converter Button
-  const convertBtn = document.getElementById("masterConvertBtn");
-  if (convertBtn) {
-    const swapSvg = `<svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>`;
-    const arrowSvg = `<svg class="btn-icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`;
-
-    if (viewName === "ai") {
-      convertBtn.innerHTML = `${swapSvg} <span>Switch to Fluids (Pipe CFD)</span> ${arrowSvg}`;
-      convertBtn.dataset.mode = "to-fluids";
-    } else {
-      convertBtn.innerHTML = `${swapSvg} <span>Switch to AI with Python (Maze Robot)</span> ${arrowSvg}`;
-      convertBtn.dataset.mode = "to-ai";
-    }
-  }
-
-  // Refresh canvases if view was hidden
-  if (viewName === "ai" && mazeEngine) {
-    setTimeout(() => {
-      mazeEngine.resizeCanvas();
-      mazeEngine.render();
-    }, 50);
-  } else if (viewName === "fluids" && fluidsSolver) {
-    setTimeout(() => {
-      fluidsSolver.render2DContour("contourCanvas");
-      updateFluidsCharts();
-    }, 50);
-  }
-}
-
-function toggleMasterConversion() {
-  if (currentView === "ai") {
-    switchView("fluids");
-  } else {
-    switchView("ai");
-  }
-}
-
-function initNavigation() {
-  document.querySelectorAll(".nav-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const target = btn.dataset.target;
-      if (target) switchView(target);
-    });
-  });
-
-  const masterBtn = document.getElementById("masterConvertBtn");
-  if (masterBtn) {
-    masterBtn.addEventListener("click", toggleMasterConversion);
-  }
-}
-
-// ------------------ AI Maze Engine UI Handlers ------------------
-function initAIClickHandlers() {
-  // Start Solve
-  const btnStart = document.getElementById("btnAiStart");
-  if (btnStart) {
-    btnStart.addEventListener("click", () => {
-      const algo = document.getElementById("selectAiAlgo").value;
-      mazeEngine.startSolve(algo);
-    });
-  }
-
-  // Instant Solve
-  const btnInstant = document.getElementById("btnAiInstant");
-  if (btnInstant) {
-    btnInstant.addEventListener("click", () => {
-      const algo = document.getElementById("selectAiAlgo").value;
-      mazeEngine.solveInstant(algo);
-    });
-  }
-
-  // Reset
-  const btnReset = document.getElementById("btnAiReset");
-  if (btnReset) {
-    btnReset.addEventListener("click", () => mazeEngine.resetRobot());
-  }
-
-  // Clear Path
-  const btnClearPath = document.getElementById("btnAiClearPath");
-  if (btnClearPath) {
-    btnClearPath.addEventListener("click", () => mazeEngine.resetRobot());
-  }
-
-  // Clear Walls
-  const btnClearWalls = document.getElementById("btnAiClearWalls");
-  if (btnClearWalls) {
-    btnClearWalls.addEventListener("click", () => {
-      mazeEngine.initGrid();
-      mazeEngine.render();
-    });
-  }
-
-  // Generate Maze
-  const btnGen = document.getElementById("btnAiGenMaze");
-  if (btnGen) {
-    btnGen.addEventListener("click", () => {
-      const type = document.getElementById("selectAiMaze").value;
-      if (type === "backtracker") mazeEngine.generateRecursiveBacktracker();
-      else if (type === "prims") mazeEngine.generatePrims();
-      else if (type === "rand25") mazeEngine.generateRandomObstacles(0.25);
-      else if (type === "rand35") mazeEngine.generateRandomObstacles(0.35);
-      else if (type === "bottleneck") mazeEngine.generatePreset("Bottleneck");
-      else if (type === "spiral") mazeEngine.generatePreset("Spiral");
-      else if (type === "multiroom") mazeEngine.generatePreset("Multi-Room");
-      else if (type === "trap") mazeEngine.generatePreset("Trap");
-      else if (type === "blank") { mazeEngine.initGrid(); mazeEngine.render(); }
-    });
-  }
-
-  // Speed Slider
-  const speedSlider = document.getElementById("sliderAiSpeed");
-  if (speedSlider) {
-    speedSlider.addEventListener("input", (e) => {
-      mazeEngine.speed = parseInt(e.target.value);
-    });
-  }
-
-  // Radio Chips (Edit Mode)
-  document.querySelectorAll("input[name='toolMode']").forEach(radio => {
-    radio.addEventListener("change", (e) => {
-      mazeEngine.mouseMode = e.target.value;
-    });
-  });
-
-  // Compare All Button
-  const btnCompare = document.getElementById("btnAiCompare");
-  if (btnCompare) {
-    btnCompare.addEventListener("click", () => runAllComparisons(mazeEngine));
-  }
-}
-
-// ------------------ Fluids CFD UI Handlers ------------------
 function initFluidsClickHandlers() {
   const btnRun = document.getElementById("btnFluidsRun");
   if (btnRun) {
@@ -379,4 +215,3 @@ function updateFluidsCharts() {
     });
   }
 }
-
